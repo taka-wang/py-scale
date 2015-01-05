@@ -43,6 +43,7 @@ class MT():
             return ret.rstrip()
         else:
             return ret
+
     def init(self, kcount=10, zcount=3):
         self.write("@")
         self.write('D "WAIT.."')
@@ -61,6 +62,7 @@ class MT():
         self.write("Z") # zero the balance
         self.write("DW")# display show weight
         print("--------------")
+
     def test(self):
         counter = 0
         self.write("@")
@@ -70,7 +72,8 @@ class MT():
             str = self.read()
             print(str)
             counter = counter + 1
-    def test2(self):
+
+    def run(self, handle):
         self.init()
         delta = 0.1
         buf = ""
@@ -79,11 +82,12 @@ class MT():
             str = self.read()
             if str.startswith("S S"): # stable
                 v = float(str[4:14])  # 10 digits
+                # v range [+inf..delta..0.00..-inf]
                 if v > delta:
                     should_zero_count = 0
                     if str != buf:    # true measurement
                         buf = str
-                        print(v)      # shoot from here <-----
+                        handle(v)     # shoot from here
                 elif v == 0:          # maybe empty
                     buf = ""
                     should_zero_count = 0
@@ -94,15 +98,17 @@ class MT():
 
             if should_zero_count == 3:
                 print(".")
-                self.write("@")
-                self.write("Z") # zero the balance
+                self.write("@")   # reset the balance, SIR cancel
+                self.write("Z")   # zero the balance
                 self.write("SIR")
                 should_zero_count = 0
                 buf = ""
 
 if __name__ == '__main__':
     mt = MT()
-    mt.test2()
+    def myprint(v):
+        print(v)
+    mt.run(myprint)
 
 
 """
