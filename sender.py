@@ -25,6 +25,7 @@ def initMQTT(url = "localhost", port = 1883, keepalive = 60):
 def pub(v, params):
     if params[0]:
         params[0].publish(params[1], v)
+        print(v)
 
 if __name__ == '__main__':
     #clnt = initMQTT(conf["url"], conf["port"], conf["keepalive"])
