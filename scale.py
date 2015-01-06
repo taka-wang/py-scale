@@ -73,7 +73,7 @@ class MT():
             print(str)
             counter = counter + 1
 
-    def run(self, handle):
+    def run(self, handle, params=[]):
         self.init()
         delta = 0.1
         buf = ""
@@ -87,7 +87,7 @@ class MT():
                     should_zero_count = 0
                     if str != buf:    # true measurement
                         buf = str
-                        handle(v)     # shoot from here
+                        handle(v, params)     # shoot from here
                 elif v == 0:          # maybe empty
                     buf = ""
                     should_zero_count = 0
@@ -106,7 +106,7 @@ class MT():
 
 if __name__ == '__main__':
     mt = MT()
-    def myprint(v):
+    def myprint(v, params):
         print(v)
     mt.run(myprint)
 
