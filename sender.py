@@ -27,8 +27,18 @@ def pub(v, params):
         params[0].publish(params[1], v)
         print(v)
 
+def init():
+    ret = {}
+    config = ConfigParser.ConfigParser()
+    config.read("config")
+    ret["url"]           = config.get('MQTT', 'url')
+    ret["port"]          = int(config.get('MQTT', 'port'))
+    ret["keepalive"]     = int(config.get('MQTT', 'keepalive'))
+    ret["topic"]         = config.get('MT', 'topic')
+    return ret
+
 if __name__ == '__main__':
-    #clnt = initMQTT(conf["url"], conf["port"], conf["keepalive"])
-    clnt = initMQTT()
+    conf = init()
+    clnt = initMQTT(conf["url"], conf["port"], conf["keepalive"])
     mt = MT()
-    mt.run(pub, [clnt, "/scale"])
+    mt.run(pub, [clnt, conf["topic"]])

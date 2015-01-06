@@ -1,0 +1,7 @@
+[MQTT]
+url       = localhost
+port      = 1883
+keepalive = 60
+
+[MT]
+topic     = /scale/
