@@ -91,6 +91,7 @@ class MT():
                 elif v == 0:          # maybe empty
                     buf = ""
                     should_zero_count = 0
+                    handle(v, params) # should remove!!!!
                 else:
                     should_zero_count = should_zero_count + 1
             else: # Nonstable

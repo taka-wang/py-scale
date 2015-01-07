@@ -3,7 +3,9 @@ py-scale
 
 pyserial for Mettler toledo weighting scale
 
-scripts
-----
+## Scripts
 - scale.py
 - sender.py
+
+## Test
+    mosquitto -c /etc/mosquitto/mosquitto.conf -d
