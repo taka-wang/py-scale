@@ -119,11 +119,3 @@ if __name__ == '__main__':
             print(v)
     mt.run(myprint)
 
-
-"""
-S S       0.00 g
-I4 A "1123272678"
-S S       0.00 g
-S S       0.00 g
-Z A
-"""

@@ -7,9 +7,6 @@ from time import sleep
 import random
 
 class Serial():
-
-    ## init(): the constructor.  Many of the arguments have default values
-    # and can be skipped when calling the constructor.
     def __init__( self, port='COM1', baudrate = 19200, timeout=1,
                   bytesize = 8, parity = 'N', stopbits = 1, xonxoff=0,
                   rtscts = 0):
@@ -65,7 +62,7 @@ class Serial():
         else:
             if self.sir:
                 ret = ""
-                val = random.uniform(3, 100)
+                val = random.uniform(3, 300) # pseudo weight
 
                 count = random.randint(20, 60)
                 for i in xrange(1, count):
@@ -99,3 +96,34 @@ class Serial():
                + " bytesize=%d, parity='%s', stopbits=%d, xonxoff=%d, rtscts=%d)"\
                % ( self.bytesize, self.parity, self.stopbits, self.xonxoff,
                    self.rtscts )
+        
+
+if __name__ == '__main__':
+    serial = Serial(port = "/dev/ttyUSB0", 
+                    baudrate = 9600, 
+                    bytesize = 8, 
+                    parity  = 'N', 
+                    stopbits = 1, 
+                    timeout = 5)
+    serial.write("@\r\n")           #I4 A "1123272678"
+    serial.write("Z\r\n")           #Z A
+    serial.write('D "WAIT.."\r\n')  #D A
+    serial.write("DW\r\n")          #DW A
+    serial.write("SIR\r\n")         #S D       6.35 g
+                                    #S S       6.33 g
+    count = 0
+    while count < 1000:
+        s = serial.readline()
+        print(s)
+        count = count + 1
+    if serial.isOpen():
+        serial.close()
+        print("close")
+
+"""
+S S       0.00 g
+I4 A "1123272678"
+S S       0.00 g
+S S       0.00 g
+Z A
+"""
