@@ -1,12 +1,12 @@
-# http://cs.smith.edu/dftwiki/index.php/PySerial_Simulator
-# fakeSerial.py
-# D. Thiebaut
-# A very crude simulator for PySerial assuming it
-# is emulating an Arduino.
+#
+# by Taka Wang
+#
+# ref: http://cs.smith.edu/dftwiki/index.php/PySerial_Simulator
 
+from time import sleep
+import random
 
-# a Serial class emulator 
-class Serial:
+class Serial():
 
     ## init(): the constructor.  Many of the arguments have default values
     # and can be skipped when calling the constructor.
@@ -24,51 +24,75 @@ class Serial:
         self.rtscts   = rtscts
         self._isOpen  = True
         self._receivedData = ""
-        self._data = "It was the best of times.\nIt was the worst of times.\n"
+        self._data    = []
+        self.sir      = False
+        random.seed(10) # random seed
 
-    ## isOpen()
-    # returns True if the port to the Arduino is open.  False otherwise
     def isOpen( self ):
         return self._isOpen
 
-    ## open()
-    # opens the port
     def open( self ):
         self._isOpen = True
 
-    ## close()
-    # closes the port
     def close( self ):
         self._isOpen = False
 
-    ## write()
-    # writes a string of characters to the Arduino
     def write( self, string ):
-        print( 'Arduino got: "' + string + '"' )
-        self._receivedData += string
+        print('[sim]: ' + string.rstrip())
+        self._receivedData = string
 
-    ## read()
-    # reads n characters from the fake Arduino. Actually n characters
-    # are read from the string _data and returned to the caller.
-    def read( self, n=1 ):
-        s = self._data[0:n]
-        self._data = self._data[n:]
-        #print( "read: now self._data = ", self._data )
-        return s
-
-    ## readline()
-    # reads characters from the fake Arduino until a \n is found.
-    def readline( self ):
-        returnIndex = self._data.index( "\n" )
-        if returnIndex != -1:
-            s = self._data[0:returnIndex+1]
-            self._data = self._data[returnIndex+1:]
-            return s
+        if  self._receivedData == "@\r\n":
+            self._data.append('I4 A "1123272678"\r\n')
+            self.sir = False
+        elif self._receivedData == "Z\r\n":
+            self._data.append('Z A\r\n')
+        elif self._receivedData == "DW\r\n":
+            self._data.append('DW A\r\n')
+        elif self._receivedData == 'D "WAIT.."\r\n':
+            self._data.append('D A\r\n')
+        elif self._receivedData == "SIR\r\n":
+            self.sir = True
         else:
-            return ""
+            pass
 
-    ## __str__()
-    # returns a string representation of the serial class
+    def readline( self ):
+        if len(self._data) > 0:
+            try:
+                ret = self._data.pop(0)
+            except Exception, e:
+                print(e)
+            return ret
+        else:
+            if self.sir:
+                ret = ""
+                val = random.uniform(3, 100)
+
+                count = random.randint(20, 60)
+                for i in xrange(1, count):
+                    self._data.append("S D %10.2f g\r\n" % ((val / count) * i))
+                    sleep(0.01)
+
+                for i in range(1, random.randint(40, 100)):
+                    self._data.append("S S %10.2f g\r\n" % val)
+                    sleep(0.01)
+
+                count = random.randint(20, 60)
+                for i in xrange(1, count):
+                    self._data.append("S D %10.2f g\r\n" % (val - (val / count) * i))
+                    sleep(0.01)
+
+                for i in range(1, random.randint(40, 100)):
+                    self._data.append('S S       0.00 g\r\n')
+                    sleep(0.01)
+
+                try:
+                    ret = self._data.pop(0)
+                except Exception, e:
+                    print(e)
+                return ret
+            else:
+                return ""
+
     def __str__( self ):
         return  "Serial<id=0xa81c10, open=%s>( port='%s', baudrate=%d," \
                % ( str(self.isOpen), self.port, self.baudrate ) \

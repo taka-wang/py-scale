@@ -2,7 +2,14 @@
 # by Taka Wang
 #
 
-import serial, signal, sys, time
+DEBUG = True
+
+if DEBUG:
+    from simulator import *
+else:
+    from serial import *
+
+import signal, sys, time
 
 class MT():
     def __init__(self, port = "/dev/ttyUSB0", baudrate = 9600, bytesize = 8, timeout = 5):
@@ -11,10 +18,10 @@ class MT():
         self.bytesize = bytesize
         self.timeout  = timeout
         try:
-            self.serial = serial.Serial(
-                self.port, 
-                self.baudrate, 
-                self.bytesize, 
+            self.serial = Serial(
+                port = self.port, 
+                baudrate = self.baudrate, 
+                bytesize = self.bytesize, 
                 parity  = 'N', 
                 stopbits = 1, 
                 timeout = self.timeout)
@@ -91,7 +98,7 @@ class MT():
                 elif v == 0:          # maybe empty
                     buf = ""
                     should_zero_count = 0
-                    handle(v, params) # should remove!!!!
+                    if not DEBUG: handle(v, params) # should remove!!!!
                 else:
                     should_zero_count = should_zero_count + 1
             else: # Nonstable
@@ -108,7 +115,8 @@ class MT():
 if __name__ == '__main__':
     mt = MT()
     def myprint(v, params):
-        print(v)
+        if v != 0:
+            print(v)
     mt.run(myprint)
 
 

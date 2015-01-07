@@ -6,8 +6,6 @@ import paho.mqtt.client as mqtt
 import time, ConfigParser
 from scale import *
 
-DEBUG = True
-
 def onConnect(client, userdata, rc):
     print("Connected to broker: " + str(rc))
 
@@ -25,7 +23,7 @@ def initMQTT(url = "localhost", port = 1883, keepalive = 60):
 def pub(v, params):
     if params[0]:
         params[0].publish(params[1], v)
-        #print(v)
+        if v!= 0: print(v)
 
 def init():
     ret = {}
