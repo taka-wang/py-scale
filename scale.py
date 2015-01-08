@@ -4,19 +4,28 @@
 
 DEBUG = True
 
-if DEBUG:
-    from simulator import *
-else:
-    from serial import *
-
 import signal, sys, time
 
-class MT():
-    def __init__(self, port = "/dev/ttyUSB0", baudrate = 9600, bytesize = 8, timeout = 5):
+class MT:
+    def __init__(   self, 
+                    port = "/dev/ttyUSB0", 
+                    baudrate = 9600, 
+                    bytesize = 8, 
+                    timeout = 5,
+                    debug = True):
+
+        global DEBUG
+        DEBUG = True if debug else False
+        if DEBUG:
+            from simulator import *
+        else:
+            from serial import *
+
         self.port     = port
         self.baudrate = baudrate
         self.bytesize = bytesize
         self.timeout  = timeout
+
         try:
             self.serial = Serial(
                 port = self.port, 

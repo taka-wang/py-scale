@@ -33,10 +33,11 @@ def init():
     ret["port"]          = int(config.get('MQTT', 'port'))
     ret["keepalive"]     = int(config.get('MQTT', 'keepalive'))
     ret["topic"]         = config.get('MT', 'topic')
+    ret["debug"] = True if int(config.get('MT', 'debug')) == 1 else False
     return ret
 
 if __name__ == '__main__':
     conf = init()
     clnt = initMQTT(conf["url"], conf["port"], conf["keepalive"])
-    mt = MT()
+    mt = MT(debug=conf["debug"])
     mt.run(pub, [clnt, conf["topic"]])
