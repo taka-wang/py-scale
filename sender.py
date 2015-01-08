@@ -7,9 +7,11 @@ import time, ConfigParser
 from scale import *
 
 def onConnect(client, userdata, rc):
+    """MQTT onConnect handler"""
     print("Connected to broker: " + str(rc))
 
 def initMQTT(url = "localhost", port = 1883, keepalive = 60):
+    """Init MQTT connection"""
     client = mqtt.Client()
     client.on_connect = onConnect
     try:
@@ -21,11 +23,15 @@ def initMQTT(url = "localhost", port = 1883, keepalive = 60):
         return None
 
 def pub(v, params):
+    """MQTT publish handler
+    Publish scale value via mqtt
+    """
     if params[0]:
         params[0].publish(params[1], v)
         if v!= 0: print(v)
 
 def init():
+    """Read config file"""
     ret = {}
     config = ConfigParser.ConfigParser()
     config.read("config")

@@ -48,12 +48,14 @@ class MT:
         sys.exit(0)
 
     def write(self, str, newline=True):
+        """send request to scale"""
         if newline:
             self.serial.write(str + "\r\n")
         else:
             self.serial.write(str)
 
     def read(self, trim = True):
+        """read response from scale"""
         ret = self.serial.readline()
         if trim:
             return ret.rstrip()
@@ -61,6 +63,7 @@ class MT:
             return ret
 
     def init(self, kcount=10, zcount=3):
+        """init scale for stability"""
         self.write("@")
         self.write('D "WAIT.."')
         self.write("SIR")
@@ -80,6 +83,7 @@ class MT:
         print("--------------")
 
     def test(self):
+        """self test"""
         counter = 0
         self.write("@")
         self.write("Z")
@@ -90,24 +94,25 @@ class MT:
             counter = counter + 1
 
     def run(self, handle, params=[]):
+        """main loop"""
         self.init()
         delta = 0.1
         buf = ""
         should_zero_count = 0
         while True:
             str = self.read()
-            if str.startswith("S S"): # stable
+            if str.startswith("S S"): # Stable
                 v = float(str[4:14])  # 10 digits
                 # v range [+inf..delta..0.00..-inf]
                 if v > delta:
                     should_zero_count = 0
-                    if str != buf:    # true measurement
+                    if str != buf:            # true measurement
                         buf = str
                         handle(v, params)     # shoot from here
-                elif v == 0:          # maybe empty
+                elif v == 0:                  # maybe empty
                     buf = ""
                     should_zero_count = 0
-                    if not DEBUG: handle(v, params) # should remove!!!!
+                    if not DEBUG: handle(v, params) # should remove! pub '0'
                 else:
                     should_zero_count = should_zero_count + 1
             else: # Nonstable

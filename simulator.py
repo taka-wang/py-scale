@@ -7,7 +7,7 @@ from time import sleep
 import random
 
 class Serial():
-    def __init__( self, port='COM1', baudrate = 19200, timeout=1,
+    def __init__( self, port='/dev/ttyUSB0', baudrate = 9600, timeout=1,
                   bytesize = 8, parity = 'N', stopbits = 1, xonxoff=0,
                   rtscts = 0):
         self.name     = port
