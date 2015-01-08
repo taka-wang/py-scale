@@ -39,7 +39,7 @@
         mqtt = new Paho.MQTT.Client(
                         host,
                         port,
-                        "web_" + parseInt(Math.random() * 100,
+                        "scale_" + parseInt(Math.random() * 100,
                         10));
         var options = {
             timeout: 3,
@@ -47,7 +47,6 @@
             cleanSession: cleansession,
             onSuccess: onConnect,
             onFailure: function (message) {
-                $('#status').val("Connection failed: " + message.errorMessage + "Retrying");
                 setTimeout(MQTTconnect, reconnectTimeout);
             }
         };
@@ -64,24 +63,18 @@
     }
 
     function onConnect() {
-        $('#status').val('Connected to ' + host + ':' + port);
-        // Connection succeeded; subscribe to our topic
         mqtt.subscribe(topic, {qos: 0});
-        //mqtt.subscribe("/ble/nearest/", {qos: 0});
         $('#topic').val(topic);
     }
 
     function onConnectionLost(response) {
         setTimeout(MQTTconnect, reconnectTimeout);
-        $('#status').val("connection lost: " + responseObject.errorMessage + ". Reconnecting");
-
     };
 
     function onMessageArrived(message) {
 
         var topic = message.destinationName;
         var payload = message.payloadString;
-        //$('#ws').prepend('<li>' + topic + ' = ' + payload + ' : ' + Date.now() + '</li>');
         $("#ws").html("<h2>" + payload + " g</h2>" + "<h3>" + new Date().toLocaleString() + "</h3>")
     };
 
