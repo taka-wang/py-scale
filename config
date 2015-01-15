@@ -4,5 +4,5 @@ port      = 1883
 keepalive = 60
 
 [MT]
-topic     = /scale/
+topic     = /lab3/scale/
 debug     = 1
