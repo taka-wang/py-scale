@@ -18,6 +18,7 @@ Read Mettler toledo weighting scale in Python
 ## Test
     mosquitto -c /etc/mosquitto/mosquitto.conf -d # start broker
     python sender.py
+    python -m SimpleHTTPServer 8000
 
 ## Installation
     sudo pip install -r requirements.txt
