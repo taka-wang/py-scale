@@ -1,5 +1,5 @@
 port = 9001;
-topic = '#';		// topic to subscribe to
+topic = '/lab3/scale/';		// topic to subscribe to
 useTLS = false;
 username = null;
 password = null;
