@@ -67,20 +67,20 @@ class Serial():
                 count = random.randint(20, 60)
                 for i in xrange(1, count):
                     self._data.append("S D %10.2f g\r\n" % ((val / count) * i))
-                    sleep(0.01)
+                    sleep(0.1)
 
                 for i in range(1, random.randint(40, 100)):
                     self._data.append("S S %10.2f g\r\n" % val)
-                    sleep(0.01)
+                    sleep(0.1)
 
                 count = random.randint(20, 60)
                 for i in xrange(1, count):
                     self._data.append("S D %10.2f g\r\n" % (val - (val / count) * i))
-                    sleep(0.01)
+                    sleep(0.1)
 
                 for i in range(1, random.randint(40, 100)):
                     self._data.append('S S       0.00 g\r\n')
-                    sleep(0.01)
+                    sleep(0.1)
 
                 try:
                     ret = self._data.pop(0)
