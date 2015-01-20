@@ -37,7 +37,7 @@
 
     function MQTTconnect() {
         mqtt = new Paho.MQTT.Client(
-                        host,
+                        window.location.hostname,
                         port,
                         "scale_" + parseInt(Math.random() * 100,
                         10));
