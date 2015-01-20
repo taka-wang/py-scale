@@ -58,7 +58,7 @@
             options.userName = username;
             options.password = password;
         }
-        console.log("Host="+ host + ", port=" + port + " TLS = " + useTLS + " username=" + username + " password=" + password);
+        console.log("Host="+ window.location.hostname + ", port=" + port + " TLS = " + useTLS + " username=" + username + " password=" + password);
         mqtt.connect(options);
     }
 
