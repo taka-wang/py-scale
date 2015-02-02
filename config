@@ -5,4 +5,4 @@ keepalive = 60
 
 [MT]
 topic     = /lab3/scale/
-debug     = 1
+debug     = 0
