@@ -112,7 +112,7 @@ class MT:
                 elif v == 0:                  # maybe empty
                     buf = ""
                     should_zero_count = 0
-                    if not DEBUG: handle(v, params) # should remove! pub '0'
+                    #if not DEBUG: handle(v, params) # should remove! pub '0'
                 else:
                     should_zero_count = should_zero_count + 1
             else: # Nonstable
