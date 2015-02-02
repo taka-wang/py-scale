@@ -5,6 +5,7 @@
 import paho.mqtt.client as mqtt
 import time, ConfigParser
 from scale import *
+zero_count = 0
 
 def onConnect(client, userdata, rc):
     """MQTT onConnect handler"""
@@ -27,8 +28,13 @@ def pub(v, params):
     Publish scale value via mqtt
     """
     if params[0]:
-        params[0].publish(params[1], v)
-        if v!= 0: print(v)
+        if zero_count < 2: #prevent too much zero feedback
+            params[0].publish(params[1], v)
+        if v != 0: #reset zero count for actual values
+            zero_count = 0
+            print(v)
+        else:
+            zero_count = zero_count + 1
 
 def init():
     """Read config file"""
