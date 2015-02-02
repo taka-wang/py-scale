@@ -2,7 +2,7 @@
 # by Taka Wang
 #
 
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     from simulator import *

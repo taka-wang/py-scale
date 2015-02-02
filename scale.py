@@ -2,7 +2,7 @@
 # by Taka Wang
 #
 
-DEBUG = True
+DEBUG = False
 
 import signal, sys, time
 
