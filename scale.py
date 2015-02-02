@@ -99,6 +99,7 @@ class MT:
         delta = 0.1
         buf = ""
         should_zero_count = 0
+        zz_count = 0
         while True:
             str = self.read()
             if str.startswith("S S"): # Stable
@@ -106,12 +107,16 @@ class MT:
                 # v range [+inf..delta..0.00..-inf]
                 if v > delta:
                     should_zero_count = 0
+                    zz_count = 0
                     if str != buf:            # true measurement
                         buf = str
                         handle(v, params)     # shoot from here
                 elif v == 0:                  # maybe empty
                     buf = ""
                     should_zero_count = 0
+                    zz_count = zz_count + 1
+                    if (zz_count < 2): # send zero to reset
+                        handle(v, params)
                     #if not DEBUG: handle(v, params) # should remove! pub '0'
                 else:
                     should_zero_count = should_zero_count + 1
